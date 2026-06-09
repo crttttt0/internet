@@ -1,9 +1,15 @@
-from datetime import date
+from __future__ import annotations
 
-from sqlalchemy import ForeignKey, String, text
-from sqlalchemy.orm import Mapped, mapped_column
+from datetime import date
+from typing import TYPE_CHECKING
+
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.models import Division
 
 
 class User(Base):
@@ -22,3 +28,5 @@ class User(Base):
     domain_password: Mapped[str] = mapped_column(String(255))
 
     division_id: Mapped[int] = mapped_column(ForeignKey("divisions.id"))
+
+    division: Mapped[Division] = relationship(lazy="raise", back_populates="users")
