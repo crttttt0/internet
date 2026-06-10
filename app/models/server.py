@@ -1,10 +1,16 @@
+from __future__ import annotations
+
 import datetime
 import ipaddress
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, LargeBinary, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.models import Division, User
 
 
 class Server(Base):
@@ -21,6 +27,13 @@ class Server(Base):
 
     division_id: Mapped[int | None] = mapped_column(ForeignKey("divisions.id"))
     admin_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
+
+    division: Mapped[Division | None] = relationship(
+        back_populates="servers", lazy="raise"
+    )
+    admin: Mapped[User | None] = relationship(
+        back_populates="servers_as_admin", foreign_keys=[admin_id], lazy="raise"
+    )
 
     @property
     def ip(self) -> str:

@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
 if TYPE_CHECKING:
-    from app.models import Division
+    from app.models import Computer, Division, Server
 
 
 class User(Base):
@@ -23,10 +23,22 @@ class User(Base):
     patronymic: Mapped[str | None] = mapped_column(String(100))
     phone: Mapped[str] = mapped_column(String(20))
     input_date: Mapped[date] = mapped_column(default=date.today)
-    email: Mapped[str] = mapped_column(String(50))
+    email: Mapped[str | None] = mapped_column(String(50))
     domain_login: Mapped[str] = mapped_column(String(100))
     domain_password: Mapped[str] = mapped_column(String(255))
 
     division_id: Mapped[int] = mapped_column(ForeignKey("divisions.id"))
 
-    division: Mapped[Division] = relationship(lazy="raise", back_populates="users")
+    division: Mapped[Division] = relationship(back_populates="users", lazy="raise")
+    computers_as_user: Mapped[list[Computer]] = relationship(
+        back_populates="user", foreign_keys="Computer.user_id", lazy="raise"
+    )
+    computers_as_admin: Mapped[list[Computer]] = relationship(
+        back_populates="admin", foreign_keys="Computer.admin_id", lazy="raise"
+    )
+    computers_as_chief: Mapped[list[Computer]] = relationship(
+        back_populates="chief", foreign_keys="Computer.chief_id", lazy="raise"
+    )
+    servers_as_admin: Mapped[list[Server]] = relationship(
+        back_populates="admin", foreign_keys="Server.admin_id", lazy="raise"
+    )

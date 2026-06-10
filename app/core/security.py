@@ -12,11 +12,13 @@ pwd_context = CryptContext(["bcrypt"], deprecated="auto")
 
 def hash_password(plain_password: str) -> str:
     """Преобразует пароль в хеш с использованием bcrypt"""
+
     return pwd_context.hash(plain_password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Проверяет, соответствует ли введённый пароль сохранtнному хешу"""
+
     return pwd_context.verify(plain_password, hashed_password)
 
 
@@ -61,6 +63,7 @@ def create_refresh_token(data: dict) -> str:
 
 def decode_token(token: str) -> dict:
     """Декодирует JWT"""
+
     return jwt.decode(
         token, settings.jwt.SECRET_KEY.get_secret_value(), [settings.jwt.ALGORITHM]
     )

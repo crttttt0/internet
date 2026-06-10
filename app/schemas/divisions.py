@@ -2,6 +2,8 @@ from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.schemas.vlans import VlanRead
+
 
 class DivisionCreate(BaseModel):
     """Схема для создания нового подразделения"""
@@ -33,7 +35,7 @@ class DivisionCreate(BaseModel):
 
 
 class DivisionUpdate(BaseModel):
-    """Схема для обновления данных подразделения (все поля опциональны)"""
+    """Схема для обновления данных подразделения, все поля опциональны)"""
 
     stc: Annotated[
         str | None,
@@ -62,7 +64,7 @@ class DivisionUpdate(BaseModel):
 
 
 class DivisionRead(BaseModel):
-    """Схема для отдачи данных подразделения клиенту (без валидации ограничений)"""
+    """Схема для отдачи данных подразделения клиенту"""
 
     id: Annotated[int, Field(description="Уникальный идентификатор подразделения")]
     stc: Annotated[str | None, Field(description="Научно-технический комплекс (НТК)")]
@@ -70,3 +72,9 @@ class DivisionRead(BaseModel):
     department: Annotated[str | None, Field(description="Конкретный отдел")]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class DivisionWithVlansRead(DivisionRead):
+    """Схема для отдачи данных подразделения вместе с VLAN-ами клиенту"""
+
+    vlans: Annotated[list[VlanRead], Field(description="VLAN-ы подразделения")]

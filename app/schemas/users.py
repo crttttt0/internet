@@ -95,7 +95,7 @@ class UserUpdate(BaseModel):
 
 
 class UserRead(BaseModel):
-    """Схема для отдачи данных клиенту (без валидации ограничений)"""
+    """Схема для отдачи данных пользователя клиенту"""
 
     id: Annotated[int, Field(description="Уникальный идентификатор пользователя")]
     first_name: Annotated[str, Field(description="Имя пользователя")]
@@ -107,12 +107,15 @@ class UserRead(BaseModel):
     domain_login: Annotated[str, Field(description="Доменный логин")]
     division_id: Annotated[int, Field(description="Идентификатор подразделения")]
 
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserWithDivisionRead(UserRead):
+    """Схема для отдачи данных пользователя вместе с подразделением клиенту"""
+
     division: Annotated[DivisionRead, Field(description="Подразделение")]
 
-    # Дублирует то, что в схеме но как-будто пох
     @computed_field(description="Полное название подразделения для таблицы")
     def division_name(self) -> str:
         parts = [self.division.stc, self.division.branch, self.division.department]
         return " - ".join([p for p in parts if p]) or "Не указано"
-
-    model_config = ConfigDict(from_attributes=True)
