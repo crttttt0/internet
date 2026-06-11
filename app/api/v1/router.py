@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import divisions_router
+from app.api.v1.endpoints import divisions_router, users_router
 
 api_router = APIRouter(prefix="/api/v1")
 
 api_router.include_router(divisions_router)
+api_router.include_router(users_router)

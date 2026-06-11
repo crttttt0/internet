@@ -30,6 +30,7 @@ async def get_all_divisions(
 
     - **200** — список подразделений (может быть пустым)
     """
+
     return await division_service.get_all_with_vlans(skip=skip, limit=limit)  # type: ignore[return-value]
 
 
@@ -47,6 +48,7 @@ async def get_division_by_id(
     - **200** — подразделение найдено
     - **404** — подразделение с таким ID не существует
     """
+
     return await division_service.get_by_id(division_id)  # type: ignore[return-value]
 
 
@@ -66,6 +68,7 @@ async def get_division_with_vlans_by_id(
     - **200** — подразделение найдено
     - **404** — подразделение с таким ID не существует
     """
+
     return await division_service.get_by_id_with_vlans(division_id)  # type: ignore[return-value]
 
 
@@ -85,6 +88,7 @@ async def create_division(
     - **201** — подразделение создано, возвращает объект с присвоенным `id`
     - **422** — ошибка валидации тела запроса (например, превышена длина поля)
     """
+
     return await division_service.create(division)  # type: ignore[return-value]
 
 
@@ -103,6 +107,7 @@ async def update_division(
     - **404** — подразделение с таким ID не существует
     - **422** — ошибка валидации тела запроса
     """
+
     return await division_service.update(division_id, division)  # type: ignore[return-value]
 
 
@@ -121,4 +126,5 @@ async def delete_division(
     - **204** — подразделение удалено
     - **404** — подразделение с таким ID не существует
     """
+
     await division_service.delete(division_id)

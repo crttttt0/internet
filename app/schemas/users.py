@@ -18,16 +18,15 @@ class UserCreate(BaseModel):
     patronymic: Annotated[
         str | None,
         Field(
-            None,
-            max_length=100,
-            description="Отчество пользователя, до 100 символов",
+            None, max_length=100, description="Отчество пользователя, до 100 символов"
         ),
     ]
     phone: Annotated[
         str, Field(max_length=20, description="Номер телефона, до 20 символов")
     ]
     email: Annotated[
-        str, Field(max_length=50, description="Электронная почта, до 50 символов")
+        str | None,
+        Field(None, max_length=50, description="Электронная почта, до 50 символов"),
     ]
     domain_login: Annotated[
         str, Field(max_length=100, description="Доменный логин, до 100 символов")
@@ -37,7 +36,7 @@ class UserCreate(BaseModel):
         str,
         Field(
             max_length=255,
-            description="Пароль от доменной учетной записи, до 255 символов",
+            description="Хеш пароля от доменной учетной записи, до 255 символов",
         ),
     ]
 
@@ -47,26 +46,18 @@ class UserUpdate(BaseModel):
 
     first_name: Annotated[
         str | None,
-        Field(
-            None,
-            max_length=100,
-            description="Имя пользователя, до 100 символов",
-        ),
+        Field(None, max_length=100, description="Имя пользователя, до 100 символов"),
     ]
     last_name: Annotated[
         str | None,
         Field(
-            None,
-            max_length=100,
-            description="Фамилия пользователя, до 100 символов",
+            None, max_length=100, description="Фамилия пользователя, до 100 символов"
         ),
     ]
     patronymic: Annotated[
         str | None,
         Field(
-            None,
-            max_length=100,
-            description="Отчество пользователя, до 100 символов",
+            None, max_length=100, description="Отчество пользователя, до 100 символов"
         ),
     ]
     phone: Annotated[
@@ -103,7 +94,7 @@ class UserRead(BaseModel):
     patronymic: Annotated[str | None, Field(description="Отчество пользователя")]
     phone: Annotated[str, Field(description="Номер телефона")]
     input_date: Annotated[date, Field(description="Дата внесения записи")]
-    email: Annotated[str, Field(description="Электронная почта")]
+    email: Annotated[str | None, Field(description="Электронная почта")]
     domain_login: Annotated[str, Field(description="Доменный логин")]
     division_id: Annotated[int, Field(description="Идентификатор подразделения")]
 

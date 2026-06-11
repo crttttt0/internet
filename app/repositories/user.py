@@ -11,12 +11,6 @@ class UserRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def get_all(self, skip: int, limit: int) -> Sequence[User]:
-        """Получить список пользователей с пагинацией"""
-
-        users = await self.session.scalars(select(User).offset(skip).limit(limit))
-        return users.all()
-
     async def get_all_with_division(self, skip: int, limit: int) -> Sequence[User]:
         """Получить список пользователей с пагинацией и подразделениями"""
 

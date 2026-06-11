@@ -13,37 +13,39 @@ class DivisionService:
     async def _get_or_raise(self, division_id: int) -> Division:
         """Получить подразделение по ID или выбросить исключение"""
 
-        division = await self.division_repository.get_by_id(division_id)
-        if not division:
+        db_division = await self.division_repository.get_by_id(division_id=division_id)
+        if not db_division:
             raise EntityNotFoundException(
                 f"Подразделение с ID {division_id} не найдено"
             )
-        return division
+        return db_division
 
     async def _get_with_vlans_or_raise(self, division_id: int) -> Division:
         """Получить подразделение с VLAN-ами по ID или выбросить исключение"""
 
-        division = await self.division_repository.get_by_id_with_vlan(division_id)
-        if not division:
+        db_division = await self.division_repository.get_by_id_with_vlan(
+            division_id=division_id
+        )
+        if not db_division:
             raise EntityNotFoundException(
                 f"Подразделение с ID {division_id} не найдено"
             )
-        return division
+        return db_division
 
     async def get_by_id(self, division_id: int) -> Division:
         """Получить подразделение по ID"""
 
-        return await self._get_or_raise(division_id)
+        return await self._get_or_raise(division_id=division_id)
 
     async def get_by_id_with_vlans(self, division_id: int) -> Division:
         """Получить подразделение по ID вместе с его VLAN-ами"""
 
-        return await self._get_with_vlans_or_raise(division_id)
+        return await self._get_with_vlans_or_raise(division_id=division_id)
 
     async def get_all_with_vlans(self, skip: int, limit: int) -> Sequence[Division]:
         """Получить все подразделения с пагинацией вместе с их VLAN-ами"""
 
-        return await self.division_repository.get_all_with_vlan(skip, limit)
+        return await self.division_repository.get_all_with_vlan(skip=skip, limit=limit)
 
     async def create(self, division: DivisionCreate) -> Division:
         """Создать новое подразделение"""
@@ -53,13 +55,13 @@ class DivisionService:
     async def update(self, division_id: int, division: DivisionUpdate) -> Division:
         """Обновить данные подразделения по ID"""
 
-        db_division = await self._get_or_raise(division_id)
+        db_division = await self._get_or_raise(division_id=division_id)
         return await self.division_repository.update(
-            db_division, **division.model_dump()
+            db_division, **division.model_dump(exclude_none=True)
         )
 
     async def delete(self, division_id: int) -> None:
         """Удалить подразделение по ID"""
 
-        db_division = await self._get_or_raise(division_id)
-        await self.division_repository.delete(db_division)
+        db_division = await self._get_or_raise(division_id=division_id)
+        await self.division_repository.delete(division=db_division)
