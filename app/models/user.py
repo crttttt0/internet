@@ -30,14 +30,8 @@ class User(Base):
     division_id: Mapped[int] = mapped_column(ForeignKey("divisions.id"))
 
     division: Mapped[Division] = relationship(back_populates="users", lazy="raise")
-    computers_as_user: Mapped[list[Computer]] = relationship(
+    computers: Mapped[list[Computer]] = relationship(
         back_populates="user", foreign_keys="Computer.user_id", lazy="raise"
-    )
-    computers_as_admin: Mapped[list[Computer]] = relationship(
-        back_populates="admin", foreign_keys="Computer.admin_id", lazy="raise"
-    )
-    computers_as_chief: Mapped[list[Computer]] = relationship(
-        back_populates="chief", foreign_keys="Computer.chief_id", lazy="raise"
     )
     servers_as_admin: Mapped[list[Server]] = relationship(
         back_populates="admin", foreign_keys="Server.admin_id", lazy="raise"

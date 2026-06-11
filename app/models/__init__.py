@@ -9,7 +9,6 @@ from .tmp import Tmp
 from .tmp_mail import TmpMail
 from .tmp_moved import TmpMoved
 from .user import User
-from .vendor import Vendor
 from .vlan import Vlan
 from .vlan_division import VlanDivision
 
@@ -25,7 +24,6 @@ __all__ = [
     "TmpMail",
     "TmpMoved",
     "User",
-    "Vendor",
     "Vlan",
     "VlanDivision",
 ]

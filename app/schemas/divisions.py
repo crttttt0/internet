@@ -2,7 +2,7 @@ from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.schemas.vlans import VlanRead
+from .vlans import VlanRead
 
 
 class DivisionCreate(BaseModel):

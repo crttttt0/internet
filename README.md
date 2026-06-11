@@ -13,7 +13,7 @@ REST API для управления сотрудниками, подразде�
 ## Требования
 
 - Python 3.14+
-- [uv](https://docs.astral.sh/uv/getting-started/installation/)
+- [uv](https://docs.astral.sh/uv/getting-started/installation/
 - MySQL 8+
 
 ## Запуск

@@ -32,19 +32,11 @@ class Computer(Base):
 
     division_id: Mapped[int] = mapped_column(ForeignKey("divisions.id"))
     user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
-    admin_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
-    chief_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     os_id: Mapped[int | None] = mapped_column(ForeignKey("os.id"))
 
     division: Mapped[Division] = relationship(back_populates="computers", lazy="raise")
     user: Mapped[User] = relationship(
-        back_populates="computers_as_user", foreign_keys=[user_id], lazy="raise"
-    )
-    admin: Mapped[User] = relationship(
-        back_populates="computers_as_admin", foreign_keys=[admin_id], lazy="raise"
-    )
-    chief: Mapped[User] = relationship(
-        back_populates="computers_as_chief", foreign_keys=[chief_id], lazy="raise"
+        back_populates="computers", foreign_keys=[user_id], lazy="raise"
     )
     os_info: Mapped[OS | None] = relationship(back_populates="computers", lazy="raise")
     status_disabled: Mapped[StatusDisabled | None] = relationship(

@@ -3,7 +3,7 @@ from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field
 
-from app.schemas.divisions import DivisionRead
+from .divisions import DivisionRead
 
 
 class UserCreate(BaseModel):

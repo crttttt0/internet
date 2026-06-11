@@ -5,7 +5,8 @@ from app.core.security import hash_password
 from app.models import User
 from app.repositories import UserRepository
 from app.schemas.users import UserCreate, UserUpdate
-from app.services import DivisionService
+
+from .division import DivisionService
 
 
 class UserService:
