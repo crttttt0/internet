@@ -15,10 +15,7 @@ class VlanRepository:
         """Получить все VLAN-ы с пагинацией вместе с их подразделениями"""
 
         vlans = await self.session.scalars(
-            select(Vlan)
-            .offset(skip)
-            .limit(limit)
-            .options(selectinload(Vlan.divisions))
+            select(Vlan).offset(skip).limit(limit).options(selectinload(Vlan.divisions))
         )
         return vlans.all()
 
@@ -31,9 +28,7 @@ class VlanRepository:
         """Получить один VLAN по ID вместе с его подразделениями"""
 
         return await self.session.scalar(
-            select(Vlan)
-            .where(Vlan.id == vlan_id)
-            .options(selectinload(Vlan.divisions))
+            select(Vlan).where(Vlan.id == vlan_id).options(selectinload(Vlan.divisions))
         )
 
     async def create(self, **kwargs: Any) -> Vlan:

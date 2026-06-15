@@ -39,7 +39,7 @@ async def get_os_by_id(
     - **404** — ОС с таким ID не существует
     """
 
-    return await os_service.get_by_id(os_id)  # type: ignore[return-value]
+    return await os_service.get_by_id(os_id=os_id)  # type: ignore[return-value]
 
 
 @router.post(
@@ -59,7 +59,7 @@ async def create_os(
     - **422** — ошибка валидации тела запроса (например, превышена длина поля)
     """
 
-    return await os_service.create(os)  # type: ignore[return-value]
+    return await os_service.create(os=os)  # type: ignore[return-value]
 
 
 @router.patch(
@@ -78,7 +78,7 @@ async def update_os(
     - **422** — ошибка валидации тела запроса
     """
 
-    return await os_service.update(os_id, os)  # type: ignore[return-value]
+    return await os_service.update(os_id=os_id, os=os)  # type: ignore[return-value]
 
 
 @router.delete(
@@ -97,4 +97,4 @@ async def delete_os(
     - **404** — ОС с таким ID не существует
     """
 
-    await os_service.delete(os_id)
+    await os_service.delete(os_id=os_id)

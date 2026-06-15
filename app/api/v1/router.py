@@ -4,6 +4,7 @@ from app.api.v1.endpoints import (
     computers_router,
     divisions_router,
     os_router,
+    servers_router,
     status_disabled_router,
     users_router,
     vlans_router,
@@ -16,4 +17,5 @@ api_router.include_router(users_router)
 api_router.include_router(os_router)
 api_router.include_router(status_disabled_router)
 api_router.include_router(computers_router)
+api_router.include_router(servers_router)
 api_router.include_router(vlans_router)

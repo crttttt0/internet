@@ -49,7 +49,7 @@ async def get_division_by_id(
     - **404** — подразделение с таким ID не существует
     """
 
-    return await division_service.get_by_id(division_id)  # type: ignore[return-value]
+    return await division_service.get_by_id(division_id=division_id)  # type: ignore[return-value]
 
 
 @router.get(
@@ -69,7 +69,7 @@ async def get_division_with_vlans_by_id(
     - **404** — подразделение с таким ID не существует
     """
 
-    return await division_service.get_by_id_with_vlans(division_id)  # type: ignore[return-value]
+    return await division_service.get_by_id_with_vlans(division_id=division_id)  # type: ignore[return-value]
 
 
 @router.post(
@@ -89,7 +89,7 @@ async def create_division(
     - **422** — ошибка валидации тела запроса (например, превышена длина поля)
     """
 
-    return await division_service.create(division)  # type: ignore[return-value]
+    return await division_service.create(division=division)  # type: ignore[return-value]
 
 
 @router.patch(
@@ -108,7 +108,7 @@ async def update_division(
     - **422** — ошибка валидации тела запроса
     """
 
-    return await division_service.update(division_id, division)  # type: ignore[return-value]
+    return await division_service.update(division_id=division_id, division=division)  # type: ignore[return-value]
 
 
 @router.delete(
@@ -127,4 +127,4 @@ async def delete_division(
     - **404** — подразделение с таким ID не существует
     """
 
-    await division_service.delete(division_id)
+    await division_service.delete(division_id=division_id)

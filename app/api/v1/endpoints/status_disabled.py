@@ -31,7 +31,7 @@ async def get_status_by_computer_id(
     - **404** — статус отключения для этого компьютера не существует
     """
 
-    return await status_disabled_service.get_by_computer_id(computer_id)  # type: ignore[return-value]
+    return await status_disabled_service.get_by_computer_id(computer_id=computer_id)  # type: ignore[return-value]
 
 
 @router.post(
@@ -54,7 +54,7 @@ async def create_status(
     - **422** — ошибка валидации тела запроса
     """
 
-    return await status_disabled_service.create(status_disabled)  # type: ignore[return-value]
+    return await status_disabled_service.create(status=status_disabled)  # type: ignore[return-value]
 
 
 @router.patch(
@@ -77,7 +77,9 @@ async def update_status(
     - **422** — ошибка валидации тела запроса
     """
 
-    return await status_disabled_service.update(computer_id, status_disabled)  # type: ignore[return-value]
+    return await status_disabled_service.update(
+        computer_id=computer_id, status=status_disabled
+    )  # type: ignore[return-value]
 
 
 @router.delete(
@@ -98,4 +100,4 @@ async def delete_status(
     - **404** — статус отключения для этого компьютера не существует
     """
 
-    await status_disabled_service.delete(computer_id)
+    await status_disabled_service.delete(computer_id=computer_id)

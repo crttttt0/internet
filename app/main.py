@@ -11,19 +11,53 @@ from app.core.exceptions import (
     EntityNotFoundException,
 )
 
+tags_metadata = [
+    {
+        "name": "computers",
+        "description": "Управление компьютерами",
+    },
+    {
+        "name": "servers",
+        "description": "Управление серверами",
+    },
+    {
+        "name": "divisions",
+        "description": "Подразделения организации (НТК - Отделение - Отдел)",
+    },
+    {
+        "name": "users",
+        "description": "Сотрудники организации",
+    },
+    {
+        "name": "vlans",
+        "description": "VLAN-ы и их привязка к подразделениям",
+    },
+    {
+        "name": "os",
+        "description": "Справочник операционных систем",
+    },
+    {
+        "name": "status-disabled",
+        "description": "Статусы отключения компьютеров",
+    },
+    {
+        "name": "health",
+        "description": "Проверка работоспособности сервиса",
+    },
+]
+
 
 def create_app() -> FastAPI:
     """
     Создает приложение, инициализирует exception-handler'ы
     для перевода исключений в HTTP-ошибки
     """
-
     app = FastAPI(
         title=settings.app.NAME,
         summary=settings.app.SUMMARY,
         version=settings.app.VERSION,
+        openapi_tags=tags_metadata,
     )
-
     app.include_router(api_router)
 
     @app.exception_handler(EntityNotFoundException)
@@ -59,7 +93,6 @@ def create_app() -> FastAPI:
     @app.get("/health", tags=["health"])
     async def health():
         """Проверка работоспособности сервера"""
-
         return {"status": "Ок"}
 
     return app

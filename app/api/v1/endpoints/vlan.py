@@ -47,7 +47,7 @@ async def get_vlan_by_id(
     - **404** — VLAN с таким ID не существует
     """
 
-    return await vlan_service.get_by_id(vlan_id)  # type: ignore[return-value]
+    return await vlan_service.get_by_id(vlan_id=vlan_id)  # type: ignore[return-value]
 
 
 @router.get(
@@ -67,7 +67,7 @@ async def get_vlan_with_divisions_by_id(
     - **404** — VLAN с таким ID не существует
     """
 
-    return await vlan_service.get_by_id_with_divisions(vlan_id)  # type: ignore[return-value]
+    return await vlan_service.get_by_id_with_divisions(vlan_id=vlan_id)  # type: ignore[return-value]
 
 
 @router.post(
@@ -87,7 +87,7 @@ async def create_vlan(
     - **422** — ошибка валидации тела запроса (например, превышена длина поля)
     """
 
-    return await vlan_service.create(vlan)  # type: ignore[return-value]
+    return await vlan_service.create(vlan=vlan)  # type: ignore[return-value]
 
 
 @router.patch("/{vlan_id}", response_model=VlanRead, summary="Обновить VLAN")
@@ -104,7 +104,7 @@ async def update_vlan(
     - **422** — ошибка валидации тела запроса
     """
 
-    return await vlan_service.update(vlan_id, vlan)  # type: ignore[return-value]
+    return await vlan_service.update(vlan_id=vlan_id, vlan=vlan)  # type: ignore[return-value]
 
 
 @router.delete(
@@ -123,4 +123,4 @@ async def delete_vlan(
     - **404** — VLAN с таким ID не существует
     """
 
-    await vlan_service.delete(vlan_id)
+    await vlan_service.delete(vlan_id=vlan_id)

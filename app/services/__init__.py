@@ -1,6 +1,7 @@
 from .computer import ComputerService
 from .division import DivisionService
 from .os import OSService
+from .server import ServerService
 from .status_disabled import StatusDisabledService
 from .user import UserService
 from .vlan import VlanService
@@ -11,5 +12,6 @@ __all__ = [
     "OSService",
     "StatusDisabledService",
     "ComputerService",
+    "ServerService",
     "VlanService",
 ]

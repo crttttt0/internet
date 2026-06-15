@@ -46,6 +46,13 @@ async def get_all_with_relations_search_filters(
         int, Query(ge=1, le=1000, description="Максимальное количество записей")
     ] = 24,
 ) -> Sequence[ComputerFullRead]:
+    """
+    Возвращает список всех компьютеров с пагинацией, развёрнутыми связями и фильтрацией.
+
+    - **200** — список компьютеров (может быть пустым)
+    - **422** — ошибка валидации query-параметров
+    """
+
     return await computer_service.get_all_with_relations_search_filters(
         skip=skip, limit=limit, filters=filters
     )  # type: ignore[return-value]
@@ -63,7 +70,7 @@ async def get_computer_by_id(
     - **404** — компьютер с таким ID не существует
     """
 
-    return await computer_service.get_by_id(computer_id)  # type: ignore[return-value]
+    return await computer_service.get_by_id(computer_id=computer_id)  # type: ignore[return-value]
 
 
 @router.get(
@@ -82,7 +89,7 @@ async def get_computer_by_id_with_relations(
     - **404** — компьютер с таким ID не существует
     """
 
-    return await computer_service.get_by_id_with_relations(computer_id)  # type: ignore[return-value]
+    return await computer_service.get_by_id_with_relations(computer_id=computer_id)  # type: ignore[return-value]
 
 
 @router.post(
@@ -103,7 +110,7 @@ async def create_computer(
     - **422** — ошибка валидации тела запроса
     """
 
-    return await computer_service.create(computer)  # type: ignore[return-value]
+    return await computer_service.create(computer=computer)  # type: ignore[return-value]
 
 
 @router.patch(
@@ -122,7 +129,7 @@ async def update_computer(
     - **422** — ошибка валидации тела запроса
     """
 
-    return await computer_service.update(computer_id, computer)  # type: ignore[return-value]
+    return await computer_service.update(computer_id=computer_id, computer=computer)  # type: ignore[return-value]
 
 
 @router.delete(
@@ -141,4 +148,4 @@ async def delete_computer(
     - **404** — компьютер с таким ID не существует
     """
 
-    await computer_service.delete(computer_id)
+    await computer_service.delete(computer_id=computer_id)

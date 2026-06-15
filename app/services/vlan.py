@@ -21,9 +21,7 @@ class VlanService:
     async def _get_with_divisions_or_raise(self, vlan_id: int) -> Vlan:
         """Получить VLAN с подразделениями по ID или выбросить исключение"""
 
-        db_vlan = await self.vlan_repository.get_by_id_with_divisions(
-            vlan_id=vlan_id
-        )
+        db_vlan = await self.vlan_repository.get_by_id_with_divisions(vlan_id=vlan_id)
         if not db_vlan:
             raise EntityNotFoundException(f"VLAN с ID {vlan_id} не найден")
         return db_vlan
@@ -41,9 +39,7 @@ class VlanService:
     async def get_all_with_divisions(self, skip: int, limit: int) -> Sequence[Vlan]:
         """Получить все VLAN-ы с пагинацией вместе с их подразделениями"""
 
-        return await self.vlan_repository.get_all_with_divisions(
-            skip=skip, limit=limit
-        )
+        return await self.vlan_repository.get_all_with_divisions(skip=skip, limit=limit)
 
     async def create(self, vlan: VlanCreate) -> Vlan:
         """Создать новый VLAN"""
