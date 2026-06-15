@@ -72,7 +72,7 @@ class ComputerRepository:
         pc_room: str | None = None,
         division_id: int | None = None,
         os_id: int | None = None,
-        vlan_name: str | None = None,
+        vlan_id: int | None = None,
         user_id: int | None = None,
         is_disabled: bool | None = None,
         search: str | None = None,
@@ -90,7 +90,7 @@ class ComputerRepository:
         )
         query = self._base_query_with_relations()
 
-        if vlan_name is not None:
+        if vlan_id is not None:
             # JOIN через association table: computers → divisions → vlandiv → vlans
             query = (
                 query.join(Computer.division)
@@ -98,11 +98,7 @@ class ComputerRepository:
                     VlanDivision,
                     VlanDivision.division_id == Computer.division_id,
                 )
-                .join(
-                    Vlan,
-                    Vlan.id == VlanDivision.vlan_id,
-                )
-                .where(Vlan.name == vlan_name)
+                .where(Vlan.id == vlan_id)
             )
 
         if conditions:

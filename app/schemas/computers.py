@@ -104,7 +104,7 @@ class ComputerFilters(BaseModel):
     pc_room: Annotated[str | None, Field(None, description="Комната")]
     division_id: Annotated[int | None, Field(None, description="ID отдела")]
     os_id: Annotated[int | None, Field(None, description="ID операционной системы")]
-    vlan_name: Annotated[str | None, Field(None, description="Название VLAN")]
+    vlan_id: Annotated[int | None, Field(None, description="ID VLAN")]
     user_id: Annotated[int | None, Field(None, description="ID пользователя")]
     is_disabled: Annotated[bool | None, Field(None, description="Отключён: true/false")]
     search: Annotated[
