@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+from datetime import date
 from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -47,7 +47,7 @@ class ServerRead(BaseModel):
     mac: Annotated[str | None, Field(description="MAC-адрес сервера")]
     room: Annotated[str | None, Field(description="Номер комнаты/кабинета")]
     build: Annotated[str | None, Field(description="Корпус")]
-    date: Annotated[datetime.date, Field(description="Дата добавления записи")]
+    date: Annotated[date, Field(description="Дата добавления записи")]
 
     division_id: Annotated[int | None, Field(description="ID подразделения")]
     admin_id: Annotated[int | None, Field(description="ID администратора")]
@@ -64,11 +64,28 @@ class ServerFullRead(ServerRead):
     @model_validator(mode="before")
     @classmethod
     def extract_vlans_from_division(cls, data: object) -> object:
-        """Вытащить VLAN-ы из division.vlans, если division загружен"""
-
         if hasattr(data, "division") and data.division is not None:
             try:
                 data.__dict__["vlans"] = data.division.vlans
             except Exception:
                 data.__dict__.setdefault("vlans", [])
+        else:
+            if hasattr(data, "__dict__"):
+                data.__dict__.setdefault("vlans", [])
         return data
+
+
+class ServerFilters(BaseModel):
+    """Query-параметры для фильтрации и поиска серверов"""
+
+    room: Annotated[str | None, Field(None, max_length=50, description="Комната")]
+    build: Annotated[str | None, Field(None, max_length=50, description="Корпус")]
+    division_id: Annotated[
+        int | None, Field(None, ge=1, description="ID подразделения")
+    ]
+    admin_id: Annotated[int | None, Field(None, ge=1, description="ID администратора")]
+    date_from: Annotated[date | None, Field(None, description="Дата добавления от")]
+    date_to: Annotated[date | None, Field(None, description="Дата добавления до")]
+    search: Annotated[
+        str | None, Field(None, max_length=50, description="Поиск по IP и MAC-адресу")
+    ]

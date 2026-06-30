@@ -84,7 +84,7 @@ def get_division_service(
 ) -> DivisionService:
     """Предоставить сервис подразделений с внедрённым репозиторием"""
 
-    return DivisionService(division_repository)
+    return DivisionService(division_repository=division_repository)
 
 
 def get_user_service(
@@ -93,7 +93,9 @@ def get_user_service(
 ) -> UserService:
     """Предоставить сервис пользователей с внедрёнными репозиторием и сервисом подразделений"""
 
-    return UserService(user_repository, division_service)
+    return UserService(
+        user_repository=user_repository, division_service=division_service
+    )
 
 
 def get_os_service(
@@ -101,17 +103,7 @@ def get_os_service(
 ) -> OSService:
     """Предоставить сервис операционных систем с внедрённым репозиторием"""
 
-    return OSService(os_repository)
-
-
-def get_status_disabled_service(
-    status_disabled_repository: Annotated[
-        StatusDisabledRepository, Depends(get_status_disabled_repository)
-    ],
-) -> StatusDisabledService:
-    """Предоставить сервис статусов отключения с внедрённым репозиторием"""
-
-    return StatusDisabledService(status_disabled_repository)
+    return OSService(os_repository=os_repository)
 
 
 def get_computer_service(
@@ -119,10 +111,31 @@ def get_computer_service(
         ComputerRepository, Depends(get_computer_repository)
     ],
     division_service: Annotated[DivisionService, Depends(get_division_service)],
+    user_service: Annotated[UserService, Depends(get_user_service)],
+    os_service: Annotated[OSService, Depends(get_os_service)],
 ) -> ComputerService:
-    """Предоставить сервис компьютеров с внедрёнными репозиторием и сервисом подразделений"""
+    """Предоставить сервис компьютеров с внедрёнными репозиторием и сервисами подразделений, пользователей и ОС"""
 
-    return ComputerService(computer_repository, division_service)
+    return ComputerService(
+        computer_repository=computer_repository,
+        division_service=division_service,
+        user_service=user_service,
+        os_service=os_service,
+    )
+
+
+def get_status_disabled_service(
+    status_disabled_repository: Annotated[
+        StatusDisabledRepository, Depends(get_status_disabled_repository)
+    ],
+    computer_service: Annotated[ComputerService, Depends(get_computer_service)],
+) -> StatusDisabledService:
+    """Предоставить сервис статусов отключения с внедрёнными репозиторием и сервисом компьютеров"""
+
+    return StatusDisabledService(
+        status_disabled_repository=status_disabled_repository,
+        computer_service=computer_service,
+    )
 
 
 def get_vlan_service(
@@ -130,7 +143,7 @@ def get_vlan_service(
 ) -> VlanService:
     """Предоставить сервис VLAN-ов с внедрённым репозиторием"""
 
-    return VlanService(vlan_repository)
+    return VlanService(vlan_repository=vlan_repository)
 
 
 def get_server_repository(
@@ -144,7 +157,12 @@ def get_server_repository(
 def get_server_service(
     server_repository: Annotated[ServerRepository, Depends(get_server_repository)],
     division_service: Annotated[DivisionService, Depends(get_division_service)],
+    user_service: Annotated[UserService, Depends(get_user_service)],
 ) -> ServerService:
-    """Предоставить сервис серверов с внедрёнными репозиторием и сервисом подразделений"""
+    """Предоставить сервис серверов с внедрёнными репозиторием и сервисами подразделений и пользователей"""
 
-    return ServerService(server_repository, division_service)
+    return ServerService(
+        server_repository=server_repository,
+        division_service=division_service,
+        user_service=user_service,
+    )

@@ -98,6 +98,13 @@ class UserRead(BaseModel):
     domain_login: Annotated[str, Field(description="Доменный логин")]
     division_id: Annotated[int, Field(description="Идентификатор подразделения")]
 
+    @computed_field(description="Полное ФИО пользователя")
+    @property
+    def full_name(self) -> str:
+        return " ".join(
+            filter(None, [self.last_name, self.first_name, self.patronymic])
+        )
+
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -106,7 +113,17 @@ class UserWithDivisionRead(UserRead):
 
     division: Annotated[DivisionRead, Field(description="Подразделение")]
 
-    @computed_field(description="Полное название подразделения для таблицы")
-    def division_name(self) -> str:
-        parts = [self.division.stc, self.division.branch, self.division.department]
-        return " - ".join([p for p in parts if p]) or "Не указано"
+
+class UserFilters(BaseModel):
+    """Query-параметры для фильтрации и поиска пользователей"""
+
+    division_id: Annotated[
+        int | None, Field(None, ge=1, description="ID подразделения")
+    ]
+    email: Annotated[str | None, Field(None, max_length=50, description="Email")]
+    phone: Annotated[str | None, Field(None, max_length=20, description="Телефон")]
+    input_date_from: Annotated[date | None, Field(None, description="Дата внесения от")]
+    input_date_to: Annotated[date | None, Field(None, description="Дата внесения до")]
+    search: Annotated[
+        str | None, Field(None, max_length=100, description="Поиск по ФИО")
+    ]

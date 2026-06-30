@@ -18,8 +18,39 @@ class ComputerCreate(BaseModel):
         str | None, Field(None, max_length=50, description="MAC-адрес устройства")
     ]
     ip: Annotated[str, Field(description="IP-адрес устройства в виде строки")]
+    build: Annotated[str | None, Field(None, max_length=255, description="Корпус")]
+    pc_room: Annotated[
+        str | None, Field(None, max_length=255, description="Номер комнаты")
+    ]
+    switch_room: Annotated[
+        str | None,
+        Field(None, max_length=255, description="Номер комм. шкафа/кроссовой"),
+    ]
+    name: Annotated[
+        str | None, Field(None, max_length=255, description="Сетевое имя компьютера")
+    ]
+    info: Annotated[
+        str | None, Field(None, max_length=500, description="Дополнительная информация")
+    ]
+    access_1c: Annotated[bool, Field(default=False, description="Доступ к 1С")]
+    access_glx: Annotated[bool, Field(default=False, description="Доступ к GLX")]
+
+    division_id: Annotated[int, Field(description="ID подразделения")]
+    user_id: Annotated[int | None, Field(None, description="ID пользователя")]
+    os_id: Annotated[int | None, Field(None, description="ID операционной системы")]
+
+
+class ComputerUpdate(BaseModel):
+    """Схема для обновления данных компьютера, все поля опциональны"""
+
+    mac: Annotated[
+        str | None, Field(None, max_length=50, description="MAC-адрес устройства")
+    ]
+    ip: Annotated[
+        str | None, Field(None, description="IP-адрес устройства в виде строки")
+    ]
     build: Annotated[
-        str | None, Field(None, max_length=255, description="Сборка/билдинг")
+        str | None, Field(None, max_length=255, description="Номер комнаты")
     ]
     pc_room: Annotated[
         str | None, Field(None, max_length=255, description="Номер комнаты/кабинета")
@@ -34,32 +65,12 @@ class ComputerCreate(BaseModel):
     info: Annotated[
         str | None, Field(None, max_length=500, description="Дополнительная информация")
     ]
-    access_1c: Annotated[bool, Field(default=False, description="Доступ к 1С")] = False
-    access_glx: Annotated[bool, Field(default=False, description="Доступ к GLX")] = (
-        False
-    )
+    access_1c: Annotated[bool | None, Field(None, description="Доступ к 1С")]
+    access_glx: Annotated[bool | None, Field(None, description="Доступ к GLX")]
 
-    division_id: Annotated[int, Field(description="ID подразделения")]
+    division_id: Annotated[int | None, Field(None, description="ID подразделения")]
     user_id: Annotated[int | None, Field(None, description="ID пользователя")]
     os_id: Annotated[int | None, Field(None, description="ID операционной системы")]
-
-
-class ComputerUpdate(BaseModel):
-    """Схема для обновления данных компьютера, все поля опциональны"""
-
-    mac: Annotated[str | None, Field(None, max_length=50)]
-    ip: Annotated[str | None, Field(None)]
-    build: Annotated[str | None, Field(None, max_length=255)]
-    pc_room: Annotated[str | None, Field(None, max_length=255)]
-    switch_room: Annotated[str | None, Field(None, max_length=255)]
-    name: Annotated[str | None, Field(None, max_length=255)]
-    info: Annotated[str | None, Field(None, max_length=500)]
-    access_1c: Annotated[bool | None, Field(None)]
-    access_glx: Annotated[bool | None, Field(None)]
-
-    division_id: Annotated[int | None, Field(None)]
-    user_id: Annotated[int | None, Field(None)]
-    os_id: Annotated[int | None, Field(None)]
 
 
 class ComputerRead(BaseModel):
@@ -98,16 +109,15 @@ class ComputerFullRead(ComputerRead):
 
 
 class ComputerFilters(BaseModel):
-    """Query-параметры для фильтрации и поиска компьютеров"""
-
-    build: Annotated[str | None, Field(None, description="Корпус")]
-    pc_room: Annotated[str | None, Field(None, description="Комната")]
-    division_id: Annotated[int | None, Field(None, description="ID отдела")]
-    os_id: Annotated[int | None, Field(None, description="ID операционной системы")]
-    vlan_id: Annotated[int | None, Field(None, description="ID VLAN")]
-    user_id: Annotated[int | None, Field(None, description="ID пользователя")]
+    build: Annotated[str | None, Field(None, max_length=255, description="Корпус")]
+    pc_room: Annotated[str | None, Field(None, max_length=255, description="Комната")]
+    division_id: Annotated[int | None, Field(None, ge=1, description="ID отдела")]
+    os_id: Annotated[
+        int | None, Field(None, ge=1, description="ID операционной системы")
+    ]
+    vlan_id: Annotated[int | None, Field(None, ge=1, description="ID VLAN")]
+    user_id: Annotated[int | None, Field(None, ge=1, description="ID пользователя")]
     is_disabled: Annotated[bool | None, Field(None, description="Отключён: true/false")]
     search: Annotated[
-        str | None,
-        Field(None, description="Поиск по имени компьютера (name)"),
+        str | None, Field(None, max_length=255, description="Поиск по имени")
     ]

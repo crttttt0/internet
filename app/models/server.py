@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 import datetime
 import ipaddress
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, LargeBinary, String
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -19,7 +17,7 @@ class Server(Base):
     __tablename__ = "servers"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    _ip: Mapped[bytes] = mapped_column("ip", LargeBinary(16))
+    _ip: Mapped[int] = mapped_column("ip")
     mac: Mapped[str | None] = mapped_column(String(50))
     room: Mapped[str | None] = mapped_column(String(50))
     build: Mapped[str | None] = mapped_column(String(50))
@@ -37,8 +35,8 @@ class Server(Base):
 
     @property
     def ip(self) -> str:
-        return str(ipaddress.ip_address(self._ip))
+        return str(ipaddress.IPv4Address(self._ip))
 
     @ip.setter
     def ip(self, value: str):
-        self._ip = ipaddress.ip_address(value).packed
+        self._ip = int(ipaddress.IPv4Address(value))

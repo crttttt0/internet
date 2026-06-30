@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api.v1.router import api_router
@@ -9,6 +10,7 @@ from app.core.exceptions import (
     BusinessRuleViolationException,
     EntityAlreadyExistsException,
     EntityNotFoundException,
+    InvalidForeignKeyException,
 )
 
 tags_metadata = [
@@ -60,6 +62,19 @@ def create_app() -> FastAPI:
     )
     app.include_router(api_router)
 
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    @app.exception_handler(InvalidForeignKeyException)
+    async def invalid_foreign_key_handler(
+        request: Request, exc: InvalidForeignKeyException
+    ) -> JSONResponse:
+        return JSONResponse(status_code=400, content={"detail": exc.detail})
+
     @app.exception_handler(EntityNotFoundException)
     async def entity_not_found_handler(
         request: Request, exc: EntityNotFoundException
@@ -69,6 +84,12 @@ def create_app() -> FastAPI:
     @app.exception_handler(EntityAlreadyExistsException)
     async def entity_already_exists_handler(
         request: Request, exc: EntityAlreadyExistsException
+    ) -> JSONResponse:
+        return JSONResponse(status_code=409, content={"detail": exc.detail})
+
+    @app.exception_handler(BusinessRuleViolationException)
+    async def business_rule_violation_handler(
+        request: Request, exc: BusinessRuleViolationException
     ) -> JSONResponse:
         return JSONResponse(status_code=409, content={"detail": exc.detail})
 
@@ -84,15 +105,9 @@ def create_app() -> FastAPI:
     ) -> JSONResponse:
         return JSONResponse(status_code=403, content={"detail": exc.detail})
 
-    @app.exception_handler(BusinessRuleViolationException)
-    async def business_rule_violation_handler(
-        request: Request, exc: BusinessRuleViolationException
-    ) -> JSONResponse:
-        return JSONResponse(status_code=422, content={"detail": exc.detail})
-
     @app.get("/health", tags=["health"])
     async def health():
-        """Проверка работоспособности сервера"""
+        """Проверка работоспособ@ности сервера"""
         return {"status": "Ок"}
 
     return app

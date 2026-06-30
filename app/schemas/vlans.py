@@ -62,3 +62,15 @@ class VlanWithDivisionsRead(VlanRead):
     divisions: Annotated[
         list["DivisionRead"], Field(description="Подразделения VLAN-а")
     ]
+
+
+class VlanFilters(BaseModel):
+    """Query-параметры для фильтрации и поиска VLAN-ов"""
+
+    acl: Annotated[str | None, Field(None, max_length=255, description="ACL VLAN-а")]
+    division_id: Annotated[
+        int | None, Field(None, ge=1, description="ID подразделения")
+    ]
+    search: Annotated[
+        str | None, Field(None, max_length=255, description="Поиск по названию")
+    ]
